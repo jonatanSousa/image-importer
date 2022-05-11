@@ -28,6 +28,8 @@ class ImageImporterCommand extends Command
     {
         $logger = new ConsoleLogger($output);
 
+        $logger->log(ConsoleLogger::INFO,'dsadasdasdadada');
+
         // Get file contents
         $image = $input->getArgument('imageUrl');
        // $output->writeln(sprintf('Hello World!, %s', $imginfo ));

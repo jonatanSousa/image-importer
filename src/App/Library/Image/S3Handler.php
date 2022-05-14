@@ -3,8 +3,7 @@
 namespace Console\App\Library\Image;
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
-use Symfony\Component\Console\Logger\ConsoleLogger;
-use Symfony\Component\Console\Output\OutputInterface;
+
 
 class S3Handler
 {

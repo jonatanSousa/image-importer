@@ -24,7 +24,6 @@ composer install
 ```
 
 
-
 At the project root path make a **.env.example** file a copy named **.env** with the following parameters:
 
 ```
@@ -68,3 +67,13 @@ To retrieve all images saved in the server one can use the GET action
 bin/console image-import GET 
 ```
 
+Comments
+=============================
+Framework
+=============================
+
+No framework was used, i opted to build a customized framework using Symfony components such as Console and DotEnv.
+
+Why Symfony components?
+=============================
+There is no reason except for curiosity and learning purposes.

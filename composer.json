@@ -4,7 +4,7 @@
         "psr/log": "*",
         "aws/aws-sdk-php": "^3.67",
         "ext-ftp": "*",
-        "symfony/dotenv": "^3.3"
+        "symfony/dotenv": "^5.4"
     },
     "autoload": {
          "psr-4": {

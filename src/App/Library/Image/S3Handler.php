@@ -4,40 +4,35 @@ namespace Console\App\Library\Image;
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 use Symfony\Component\Console\Logger\ConsoleLogger;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class S3Handler
 {
-    private S3Client $s3;
-    private ConsoleLogger $logger;
+    private $s3;
 
-    /**
-     * @param S3Client $s3Client
-     * @param ConsoleLogger $logger
-     */
-    public function __construct( S3Client $s3Client, ConsoleLogger $logger )
+    public function __construct()
     {
-        $this->s3 = new $s3Client([
+        $this->s3 = new S3Client([
             'version' => 'latest',
-            'region'  => 'us-west-2'
+            'region'  => $_ENV['S3_BUCKET_REGION']
         ]);
-
-        $this->logger = new $logger();
     }
 
     /**
      * @param $file
-     * @return \Aws\Result|void
+     * @return \Aws\Result
+     * @throws \Exception
      */
     public function uploadFile($file){
         try {
             return $this->s3->putObject([
-                'Bucket' => 'my-bucket',
-                'Key'    => 'my-object',
-                'Body'   => fopen('/path/to/'.$file, 'r'),
+                'Bucket' => $_ENV['S3_BUCKET'],
+                'Key'    => $_ENV['S3_SECRET_KEY'],
+                'Body'   => fopen('images/'.$file, 'r'),
                 'ACL'    => 'public-read',
             ]);
         } catch (S3Exception $e) {
-            $this->logger->log("There was an error uploading the file.", $e->getMessage());
+            throw new \Exception('Image does Not Exists use GET action to list images'.$e->getMessage());
         }
     }
 }

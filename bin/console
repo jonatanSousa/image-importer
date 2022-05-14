@@ -4,7 +4,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
  
 use Symfony\Component\Console\Application;
 use Console\App\Commands\ImageImporterCommand;
- 
+use Symfony\Component\Dotenv\Dotenv;
+
+$dotenv = new Dotenv();
+$dotenv->load('.env');
+
 $app = new Application();
 $app->add(new ImageImporterCommand());
 $app->run();

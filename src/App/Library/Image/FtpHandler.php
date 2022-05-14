@@ -5,32 +5,35 @@ namespace Console\App\Library\Image;
 
 class FtpHandler
 {
-
     private $connection;
     private $username;
     private $password;
-    private $server;
 
     public function __construct()
     {
-
-
-        $this->connection = ftp_connect($config->server);
-        $this->username = $config->server;
-        $this->password = $config->server;
-        $this->server = $config->server;
+        $this->connection = ftp_connect($_ENV['FTP_HOST']) or die("Could not connect to ".$_ENV['HOST']);
+        $this->username = $_ENV['FTP_USERNAME'];
+        $this->password =$_ENV['FTP_PASSWORD'];
     }
 
-    function uploadFTP($local_file, $remote_file){
+    /**
+     * @param $local_file
+     * @param $remote_file
+     * @return bool
+     * @throws \Exception
+     */
+    function uploadFTP($local_file, $remote_file): bool
+    {
         // login
-        if (@ftp_login($this->connection, $this->username, $this->password)){
+        if ($connecT = ftp_login($this->connection, $this->username, $this->password)){
             // successfully connected
         }else{
-            return false;
+            throw new \Exception('FTP HANDLER : connection unsuccessful: '. $this->username.' passs: '.$this->password );
         }
 
-        ftp_put($this->connection, $remote_file, $local_file, FTP_BINARY);
+        $ftpPutResult = ftp_put($this->connection, $remote_file, 'images/'.$local_file, FTP_BINARY);
         ftp_close($this->connection);
+
         return true;
     }
 }

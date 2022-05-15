@@ -10,8 +10,25 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 
+/**
+ * TODO: Inherintance should be avoided one should consider replacing
+ *
+ */
 class ImageImporterCommand extends Command
 {
+    private $imageClass;
+    private $s3Handler;
+    private $ftpHandler;
+
+    public function __construct()
+    {
+        $this->imageClass = new Image();
+        $this->s3Handler = New S3Handler();
+        $this->ftpHandler = new FtpHandler();
+
+        parent::__construct(  );
+    }
+
     protected function configure()
     {
         $this->setName('image-importer')
@@ -29,7 +46,6 @@ class ImageImporterCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $logger = new ConsoleLogger($output, []);
-        $imageClass = New Image();
 
         try {
             // Get Console Arguments
@@ -37,24 +53,22 @@ class ImageImporterCommand extends Command
             $action = $input->getArgument('action');
 
             //basic image validation
-            if (!preg_match('~\.(png|gif|jpe?g|bmp|svg)~i', $image) && $action !== $imageClass::get) {
+            if (!preg_match('~\.(png|gif|jpe?g|bmp|svg)~i', $image) && $action !== $this->imageClass::GET) {
                 throw new \Exception('Only Images are allowed');
             }
 
-            if ($action == $imageClass::save) {
-                $saveResult = $imageClass->save($image);
+            if ($action == $this->imageClass::SAVE) {
+                $saveResult = $this->imageClass->save($image);
                 if($saveResult) {
                     $logger->warning('CONSOLE SAVE : image name '.basename($image));
                     //put file in S3 Bucket
                     if($_ENV['S3_ENABLED']) {
-                        $s3Handler = New S3Handler();
-                        $s3Handler->uploadFile(basename($image));
+                        $this->s3Handler->uploadFile(basename($image));
                     }
 
                     //put file in FTP Server
                     if($_ENV['FTP_ENABLED']) {
-                        $ftpHandler = new FtpHandler();
-                        $ftpHandler->uploadFTP(basename($image), basename($image));
+                        $this->ftpHandler->uploadFTP(basename($image), basename($image));
                     }
 
                     return 1;
@@ -62,8 +76,8 @@ class ImageImporterCommand extends Command
             }
 
             //delete the image
-            if ($action == $imageClass::delete) {
-                $deleteResult = $imageClass->delete($image);
+            if ($action == $this->imageClass::DELETE) {
+                $deleteResult = $this->imageClass->delete($image);
                 if($deleteResult) {
                     $logger->warning('CONSOLE DELETE : image name '.$image);
                     return 1;
@@ -71,8 +85,8 @@ class ImageImporterCommand extends Command
             }
 
             //get all Images
-            if ($action == $imageClass::get) {
-                $files = $imageClass->getImageList();
+            if ($action == $this->imageClass::GET) {
+                $files = $this->imageClass->getImageList();
                 foreach($files as $file){
                     $logger->warning('CONSOLE GET : image name '.$file);
                 }

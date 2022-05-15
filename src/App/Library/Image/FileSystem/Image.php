@@ -4,9 +4,9 @@ namespace Console\App\Library\Image\FileSystem;
 
 class Image
 {
-    const get = 'GET';
-    const delete = 'DELETE';
-    const save = 'SAVE';
+    const GET = 'GET';
+    const DELETE = 'DELETE';
+    const SAVE = 'SAVE';
 
     /**
      * @return array

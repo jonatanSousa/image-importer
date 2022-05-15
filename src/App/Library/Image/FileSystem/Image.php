@@ -41,6 +41,11 @@ class Image
      */
     public function save($image): int
     {
+        //basic image validation
+        if (!preg_match('~\.(png|gif|jpe?g|bmp|svg)~i', $image)) {
+            throw new \Exception('Only Images are allowed');
+        }
+
         $downloadedImage = file_get_contents($image);
         if($saveResult = file_put_contents('images/'.basename($image), $downloadedImage)) {
             return $saveResult;

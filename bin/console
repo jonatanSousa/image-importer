@@ -6,6 +6,7 @@ use Symfony\Component\Console\Application;
 use Console\App\Commands\ImageImporterCommand;
 use Symfony\Component\Dotenv\Dotenv;
 
+//gets .env configuration file
 $dotenv = new Dotenv();
 $dotenv->load('.env');
 

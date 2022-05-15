@@ -42,29 +42,34 @@ FTP_PASSWORD=<your FTP password>
 
 Unit Testing
 =============================
-Unit tests are using are doing basic verifications on image storage class.
 
 ```
-phpunit
+phpunit --bootstrap vendor/autoload.php tests
 ```
 
 Usage
 =============================
-The console command CLI has 3 actions (GET, SAVE, DELETE) 
-eg:
+
+To Get instructions:   
 
 ```
-bin/console image-import SAVE http://dev-humansciences.au.edu/wp-content/uploads/2022/02/testing.jpg 
+bin/console  
+```
+
+The console command CLI has 3 actions (GET, SAVE, DELETE) eg:
+
+```
+bin/console image:import SAVE http://dev-humansciences.au.edu/wp-content/uploads/2022/02/testing.jpg 
 ```
 
 ```
-bin/console image-import DELETE testing.jpg 
+bin/console image:import DELETE testing.jpg 
 ```
 
 To retrieve all images saved in the server one can use the GET action
 
 ```
-bin/console image-import GET 
+bin/console image:import GET 
 ```
 
 Comments

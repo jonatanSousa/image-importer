@@ -31,8 +31,8 @@ class ImageImporterCommand extends Command
 
     protected function configure()
     {
-        $this->setName('image-importer')
-            ->setDescription('Gets an image from a URl and uploads it to S3 bucket or Server')
+        $this->setName('image:importer')
+            ->setDescription('Gets an image from a URl and saves it locally to Images directory optionally it can send the image to a S3 bucket or FTP Server')
             ->setHelp('Demonstration of custom commands created by Symfony Console component.')
             ->addArgument('action', InputArgument::REQUIRED, 'can be: SAVE,DELETE,GET ')
             ->addArgument('image', InputArgument::OPTIONAL, 'Pass the image Url or Array of URL');
@@ -52,16 +52,18 @@ class ImageImporterCommand extends Command
             $image = $input->getArgument('image');
             $action = $input->getArgument('action');
 
-            //basic image validation
-            if (!preg_match('~\.(png|gif|jpe?g|bmp|svg)~i', $image) && $action !== $this->imageClass::GET) {
-                throw new \Exception('Only Images are allowed');
-            }
+
 
             if ($action == $this->imageClass::SAVE) {
                 $saveResult = $this->imageClass->save($image);
                 if($saveResult) {
-                    $logger->warning('CONSOLE SAVE : image name '.basename($image));
-                    //put file in S3 Bucket
+
+                    $output->writeln([
+                        'CONSOLE SAVE : image name '.basename($image),
+                        '============',
+                        '',
+                    ]);
+
                     if($_ENV['S3_ENABLED']) {
                         $this->s3Handler->uploadFile(basename($image));
                     }
@@ -79,7 +81,7 @@ class ImageImporterCommand extends Command
             if ($action == $this->imageClass::DELETE) {
                 $deleteResult = $this->imageClass->delete($image);
                 if($deleteResult) {
-                    $logger->warning('CONSOLE DELETE : image name '.$image);
+                    $output->writeln('CONSOLE DELETE : image name '.$image);
                     return 1;
                 }
             }
@@ -87,8 +89,13 @@ class ImageImporterCommand extends Command
             //get all Images
             if ($action == $this->imageClass::GET) {
                 $files = $this->imageClass->getImageList();
+                $output->writeln([
+                    'CONSOLE GET: there are '.count($files).' files in the images directory'
+                ]);
                 foreach($files as $file){
-                    $logger->warning('CONSOLE GET : image name '.$file);
+                    $output->writeln([
+                        'CONSOLE GET: image name:  '.$file,
+                    ]);
                 }
             }
 

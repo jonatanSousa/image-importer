@@ -11,8 +11,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 
 /**
- * TODO: Inherintance should be avoided one should consider replacing
- *
+ * TODO: Inherintance should be avoided one should consider find a way to use symfony console without it
  */
 class ImageImporterCommand extends Command
 {

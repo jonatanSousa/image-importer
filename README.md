@@ -56,7 +56,7 @@ To Get instructions:
 bin/console  
 ```
 
-The console command CLI has 3 actions (GET, SAVE, DELETE) eg:
+The console command CLI has 3 case Sensitive actions (GET, SAVE, DELETE) eg:
 
 ```
 bin/console image:import SAVE http://dev-humansciences.au.edu/wp-content/uploads/2022/02/testing.jpg 
